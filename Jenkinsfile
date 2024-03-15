@@ -3,17 +3,9 @@ pipeline {
 
     stages {
         
-        stage('Build and Test Python Project') {
+        stage ('build'){
             steps {
-                script { 
-                    bat 'python -m robot C:\Users\David\Desktop\trailrunners\trailrunners\selenium\labb2.robot'
-                }
-            }
-            post {
-                always {
-                    robot outputPath: 'C:\Users\David\Desktop\trailrunners\trailrunners\selenium'
-
-                }
+                sh "mvn compile"
             }
         }
     }
