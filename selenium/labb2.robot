@@ -1,6 +1,7 @@
 *** Settings ***
 Documentation   boka bil
 Library     SeleniumLibrary
+Library    DateTime    # Importera DateTime-biblioteket
 Suite Setup     setup
 Suite Teardown      Teardown
 
@@ -16,8 +17,8 @@ ${lastname}      Doe
 ${phonenumber}      0123456789
 ${usermail}     johndoe@email.boi
 ${pass}     abc123
-${start date}      2024-02-28
-${end date}        2024-02-29
+${start date}      03-15
+${end date}        04-15
 ${continue}        //*[@id="continue"]
 ${car}      //*[@id="bookModelSpass5"]
 ${card no.}     1234567891234567
@@ -27,6 +28,8 @@ ${cvc}          789
 ${confirm}      //*[@id="confirm"]
 ${mypage}       //*[@id="mypage"]
 ${logout}       //*[@id="logout"]
+${current_date}    Get Time    now    result_format=%Y-%m-%d
+
 
 
 *** Test Cases ***
@@ -67,14 +70,22 @@ creating account with incorrect personal info
     create user
 
 
+choose car through list
+    log in to site
+    choosing date
+    choosing car
+
+
 *** Keywords ***
 setup
     Open Browser    browser=Chrome
     Go To    ${url}
     Wait Until Page Contains Element    ${title}
-    Set Selenium Speed    0.5
+    Set Selenium Speed    0
+
 Teardown
     Close Browser
+
 
 User logs into website
     [Arguments]    ${username}    ${password}
@@ -85,7 +96,7 @@ User logs into website
     Click Element    ${login}
     Wait Until Page Contains Element    //*[@id="welcomePhrase"]
 
-User chooses date for trip
+User chooses date for trip                                                                  #lägg in 88 i 156
     [Documentation]     User enters date for the trip
     [Tags]      date
     Click Element    //*[@id="reset"]
@@ -153,7 +164,7 @@ website log in
     Click Element    ${login}
     Wait Until Page Contains Element    //*[@id="welcomePhrase"]
 
-choose date for trip
+choose date for trip                                                                        #lägg in 88 i 156 ta bort denna
     [Documentation]     User enters date for the trip
     [Tags]      date
     Click Element    //*[@id="title"]
@@ -185,6 +196,8 @@ confirm booking
     Wait Until Page Contains Element    //*[@id="confirmMessage"]/label
     Click Element    ${mypage}
     Wait Until Page Contains Element    //*[@id="model1"]
+
+
 
 cancel booking
     [Documentation]     cancel booking
@@ -272,3 +285,51 @@ create user
     Input Text    //*[@id="confirmPassword"]    abc123
     Click Element    //*[@id="create"]
     Wait Until Page Contains Element    //*[@id="questionText"]
+    Click Element    //*[@id="title"]
+
+
+
+log in to site
+    [Documentation]     User enters information to log in
+    [Tags]      log in
+    Input Text    ${e-mail field}    ${usermail}
+    Input Password    ${pass field}    ${pass}
+    Click Element    ${login}
+    Wait Until Page Contains Element    //*[@id="welcomePhrase"]
+
+choosing date
+    [Documentation]     User enters date for the trip
+    [Tags]      date
+    Click Element    //*[@id="reset"]
+    Click Element    //*[@id="end"]
+    Input Text    //*[@id="end"]    ${end date}
+    Click Element    ${continue}
+
+choosing car
+    [Documentation]     User chooses car
+    [Tags]              Car
+    Wait Until Page Contains Element    //*[@id="questionText"]
+
+    # Välj Volvo från rull-listan
+    Click Element    //*[@id="ms-list-1"]/button
+    Click Element    //*[@id="ms-opt-4"]
+    Click Element    //*[@id="ms-opt-3"]
+
+    # Kontrollera att Volvo syns i rull-listan
+    Element Should Be Visible    //*[@id="ms-list-1"]/button/span[contains(text(), 'Volvo')]    msg=Volvo should be present in the list
+
+    # Välj Tesla från rull-listan
+    Click Element    //*[@id="ms-list-2"]/button
+    Click Element    //*[@id="ms-opt-6"]
+
+    # Kontrollera att Volvo fortfarande syns i rull-listan även när Tesla visas
+    Element Should Be Visible    //*[@id="ms-list-1"]/button/span[contains(text(), 'Volvo')]    msg=Volvo should be present in the list
+
+    # Kontrollera att Tesla syns i rull-listan
+    Element Should Be Visible    //*[@id="ms-list-1"]/button/span[contains(text(), 'Tesla')]    msg=Tesla should be present in the list
+
+    # Kontrollera att endast Tesla syns i listan nedan
+    Element Should Be Visible    //*[@id="carTable"]/tbody/tr/td[contains(text(), 'Tesla')]    msg=Only Tesla should be present in the list below
+    Element Should Not Be Visible    //*[@id="carTable"]/tbody/tr/td[contains(text(), 'Volvo')]    msg=Volvo should not be present in the list below
+
+    Wait Until Page Contains Element    //*[@id="carTable"]/tbody/tr/td[1]
