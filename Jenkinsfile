@@ -9,11 +9,15 @@ pipeline {
         }
         stage ('test') {
             steps {
-                bat "mvn test" // Kör testerna
+                // Kör testerna
+                bat "mvn test"
+                // Publicera testresultaten
+                junit 'target/surefire-reports/*.xml' // Ange sökvägen till dina testresultatfiler
             }
         }
     }
 }
+
 
 
 
