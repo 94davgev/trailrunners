@@ -2,23 +2,20 @@ pipeline {
     agent any
 
     stages {
-        
-        stage('Build and Test Python Project') {
+        stage ('build'){
             steps {
-                script { 
-                    bat 'python -m robot C:\Users\David\Desktop\trailrunners\trailrunners\selenium\labb2.robot'
-                }
+                bat "mvn compile"
             }
-            post {
-                always {
-                    robot outputPath: 'C:\Users\David\Desktop\trailrunners\trailrunners\selenium'
-
-                }
+        }
+        stage ('test') {
+            steps {
+                // Kör testerna
+                bat "mvn test"
+                // Publicera testresultaten
+                junit 'target/surefire-reports/*.xml' // Ange sökvägen till dina testresultatfiler
             }
         }
     }
 }
-
-
 
 
