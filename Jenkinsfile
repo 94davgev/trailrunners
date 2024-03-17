@@ -2,15 +2,20 @@ pipeline {
     agent any
 
     stages {
-        
         stage ('build'){
             steps {
-                sh "mvn compile"
+                bat "mvn compile"
+            }
+        }
+        stage ('test') {
+            steps {
+                // Kör testerna
+                bat "mvn test"
+                // Publicera testresultaten
+                junit 'target/surefire-reports/*.xml' // Ange sökvägen till dina testresultatfiler
             }
         }
     }
 }
-
-
 
 
