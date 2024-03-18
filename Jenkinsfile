@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage ('build'){
+        stage ('build') {
             steps {
                 bat "mvn compile"
             }
@@ -11,12 +11,26 @@ pipeline {
             steps {
                 // Kör testerna
                 bat "mvn test"
-                // Publicera testresultaten
-                junit 'target/surefire-reports/*.xml' // Ange sökvägen till dina testresultatfiler
+                // Publicera testresultaten från Maven
+                junit 'target/surefire-reports/*.xml'
+            }
+        }
+        stage('Build and Test Python Project') {
+            steps {
+                script { 
+                    bat 'python -m robot C:/Users/David/Desktop/trailrunners/trailrunners/selenium/labb2.robot'
+                }
+            }
+            post {
+                always {
+                    // Arkivera testresultaten från Robot Framework-testerna
+                    archiveArtifacts artifacts: 'C:/Users/David/Desktop/trailrunners/trailrunners/selenium/output.xml', onlyIfSuccessful: true
+                }
             }
         }
     }
 }
+
 
 
 
