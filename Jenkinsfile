@@ -24,12 +24,13 @@ pipeline {
             post {
                 always {
                     // Arkivera testresultaten från Robot Framework-testerna
-                    archiveArtifacts artifacts: 'C:/Users/David/Desktop/trailrunners/trailrunners/selenium/output.xml', onlyIfSuccessful: true
+                    archiveArtifacts artifacts: 'C:/Users/David/Desktop/trailrunners/trailrunners/selenium/reports/output.xml', onlyIfSuccessful: true
                 }
             }
         }
     }
 }
+
 
 
 
