@@ -17,14 +17,14 @@ pipeline {
         }
         stage('Build and Test Python Project') {
             steps {
-                script { 
-                    bat 'python -m robot C:/Users/David/Desktop/trailrunners/trailrunners/selenium/labb2.robot'
+                script {
+                    bat 'python -m robot C:/Users/David/.jenkins/workspace/David_Gevriye_Maraha/selenium'
                 }
             }
             post {
                 always {
                     robot outputpath: 'C:/Users/David/.jenkins/workspace/David_Gevriye_Maraha' , passThreshold: 80.0, unstableThreshold: 70.0, onlyCritical: false
-                    
+                   
                 }
             }
         }
