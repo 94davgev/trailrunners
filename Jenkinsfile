@@ -23,6 +23,17 @@ pipeline {
             }
             post {
                 always {
+                    // Arkivera XML-testresultaten från Robot Framework-testerna
+                    archiveArtifacts artifacts: 'C:/Users/David/Desktop/trailrunners/trailrunners/selenium/output.xml', onlyIfSuccessful: true
+                    // Publicera HTML-rapporten från Robot Framework-testerna
+                    publishHTML([
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'C:/Users/David/Desktop/trailrunners/trailrunners/selenium/logs',
+                        reportFiles: 'log.html',
+                        reportName: 'Robot Framework Test Log'
+                    ])
                     // Publicera HTML-rapporten från Robot Framework-testerna
                     publishHTML([
                         allowMissing: false,
@@ -37,6 +48,7 @@ pipeline {
         }
     }
 }
+
 
 
 
