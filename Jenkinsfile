@@ -23,8 +23,8 @@ pipeline {
             }
             post {
                 always {
-                    robot outputpath: 'C:/Users/David/.jenkins/workspace/David_Gevriye_Maraha' , passThreshold: 80.0, unstableThreshold: 70.0, onlyCritical: false
-                   
+                    robot outputPath: 'C:/Users/David/.jenkins/workspace/David_Gevriye_Maraha' , passThreshold: 80.0, unstableThreshold: 70.0, onlyCritical: false
+                                        
                 }
             }
         }
